@@ -1,7 +1,18 @@
-var myDataRef = new Firebase('https://airdino.firebaseio.com/');
+var reference = new Firebase('https://airdino.firebaseio.com/');
 var beta = 0;
 var gamma = 0;
 var alpha = 0;
+
+var onComplete = function(error) {
+  if (error) {
+    console.log('Synchronization failed');
+  } else {
+    console.log('Synchronization succeeded');
+  }
+};
+reference.set({ first: 'player1', last: 'player2' }, onComplete);
+reference.child('player1').push({'beta': beta, 'gamma': gamma, 'alpha': alpha});
+
 
 function tilt(string,x,y,z){
 
@@ -20,20 +31,13 @@ function tilt(string,x,y,z){
   }
 
 setInterval(function(){
-  myDataRef.push({'beta': beta, 'gamma': gamma, 'alpha': alpha});
+    reference.child('player1').set({'beta': beta, 'gamma': gamma, 'alpha': alpha});
     document.getElementById('debug').innerHTML = beta + ' ' + gamma + ' ' + alpha;
   }
-  ,5000);
+  ,0);
 
-myDataRef.on('child_changed', function(snapshot) {
+reference.on('child_changed', function(snapshot) {
   var rotation = snapshot.val();
   console.log(rotation.beta);
   //displayChatMessage(rotation.beta, rotation.gamma, rotation.alpha);
 });
-
-// function displayChatMessage(x,y,z) {
-//   document.getElementById("output").innerHTML = "x : " + Math.floor(x) +
-//   '  y : ' + Math.floor(y) + '  z : ' + Math.floor(z);
-//   // $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
-//   // $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
-// };
