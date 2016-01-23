@@ -10,7 +10,6 @@ var onComplete = function(error) {
     console.log('Synchronization succeeded');
   }
 };
-reference.set({ first: 'player1', last: 'player2' }, onComplete);
 reference.child('player1').push({'beta': beta, 'gamma': gamma, 'alpha': alpha});
 
 
@@ -27,14 +26,15 @@ function tilt(string,x,y,z){
   if (window.DeviceOrientationEvent) {
       window.addEventListener("deviceorientation", function () {
         tilt("rotation",event.beta, event.gamma, event.alpha);
+        reference.child('player1').set({'beta': beta, 'gamma': gamma, 'alpha': alpha});
       }, true);
   }
 
-setInterval(function(){
-    reference.child('player1').set({'beta': beta, 'gamma': gamma, 'alpha': alpha});
-    document.getElementById('debug').innerHTML = beta + ' ' + gamma + ' ' + alpha;
-  }
-  ,0);
+// setInterval(function(){
+//
+//     document.getElementById('debug').innerHTML = beta + ' ' + gamma + ' ' + alpha;
+//   }
+//   ,0);
 
 reference.on('child_changed', function(snapshot) {
   var rotation = snapshot.val();
