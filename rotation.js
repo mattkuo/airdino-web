@@ -32,6 +32,7 @@ function isChangeSignificant(oldVal, newVal) {
 $(document).ready(function(){
   $('#ex1').slider();
   $('#ex1').change(function(value) {
+
     socket.emit("speed", value.value.newValue);
   });
   $('#ex1').slider({
