@@ -1,4 +1,4 @@
-var socket = io('http://localhost');
+var socket = io('http://45.79.134.17:7777');
 var beta = 0;
 var gamma = 0;
 var alpha = 0;
