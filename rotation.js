@@ -27,6 +27,19 @@ function isChangeSignificant(oldVal, newVal) {
   return Math.abs(newVal - oldVal) > TOLERANCE;
 }
 
+
+$(document).ready(function(){
+  $('#slow').button();
+  $('#slow').click(function() {
+    socket.emit("speed", -10);
+  });
+  $('#fast').button();
+  $('#fast').click(function() {
+    socket.emit("speed",10);
+  });
+
+});
+
 if (window.DeviceOrientationEvent) {
   window.addEventListener("deviceorientation", function () {
     if (tilt("rotation",event.beta, event.gamma, event.alpha)) {
