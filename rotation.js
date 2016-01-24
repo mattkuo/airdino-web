@@ -5,6 +5,7 @@ var beta = 0,
     gamma = 0,
     alpha = 0;
 
+
 function tilt(string,x,y,z){
   var changeSignificant = false;
   if (isChangeSignificant(beta, Math.floor(x)) ||
@@ -29,15 +30,15 @@ function isChangeSignificant(oldVal, newVal) {
 
 
 $(document).ready(function(){
-  $('#slow').button();
-  $('#slow').click(function() {
-    socket.emit("speed", -10);
+  $('#ex1').slider();
+  $('#exi').change(function(value) {
+    socket.emit("speed", value);
   });
-  $('#fast').button();
-  $('#fast').click(function() {
-    socket.emit("speed",10);
+  $('#ex1').slider({
+  	formatter: function(value) {
+  		return 'Current value: ' + value;
+  	}
   });
-
 });
 
 if (window.DeviceOrientationEvent) {
