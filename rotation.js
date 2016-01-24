@@ -5,15 +5,6 @@ var beta = 0,
     gamma = 0,
     alpha = 0;
 
-var onComplete = function(error) {
-  if (error) {
-    console.log('Synchronization failed');
-  } else {
-    console.log('Synchronization succeeded');
-  }
-};
-
-
 function tilt(string,x,y,z){
   var changeSignificant = false;
   if (isChangeSignificant(beta, Math.floor(x)) ||
