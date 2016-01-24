@@ -1,10 +1,9 @@
 var socket = io('http://45.79.134.17:7777');
-var beta = 0;
-var gamma = 0;
-var alpha = 0;
-socket.on('connect', function(){
-  socket.emit("gyro", {'beta': beta, 'gamma': gamma, 'alpha': alpha});
-});
+
+var TOLERANCE = 2;
+var beta = 0,
+    gamma = 0,
+    alpha = 0;
 
 var onComplete = function(error) {
   if (error) {
@@ -16,6 +15,12 @@ var onComplete = function(error) {
 
 
 function tilt(string,x,y,z){
+  var changeSignificant = false;
+  if (isChangeSignificant(beta, Math.floor(x)) ||
+      isChangeSignificant(gamma, Math.floor(y) ||
+      isChangeSignificant(alpha, Math.floor(z)))) {
+    changeSignificant = true;
+  }
 
   beta = Math.floor(x);
   gamma = Math.floor(y);
@@ -23,17 +28,18 @@ function tilt(string,x,y,z){
 
   document.getElementById(string).innerHTML = "x : " + Math.floor(x) +
   '  y : ' + Math.floor(y) + '  z : ' + Math.floor(z);
+
+  return changeSignificant;
 }
 
-  if (window.DeviceOrientationEvent) {
-      window.addEventListener("deviceorientation", function () {
-        tilt("rotation",event.beta, event.gamma, event.alpha);
-        socket.emit("gyro", {'beta': beta, 'gamma': gamma, 'alpha': alpha});
-      }, true);
-  }
+function isChangeSignificant(oldVal, newVal) {
+  return Math.abs(newVal - oldVal) > TOLERANCE;
+}
 
-// setInterval(function(){
-//
-//     document.getElementById('debug').innerHTML = beta + ' ' + gamma + ' ' + alpha;
-//   }
-//   ,0);
+if (window.DeviceOrientationEvent) {
+  window.addEventListener("deviceorientation", function () {
+    if (tilt("rotation",event.beta, event.gamma, event.alpha)) {
+      socket.emit("gyro", {'beta': beta, 'gamma': gamma, 'alpha': alpha});
+    }
+  }, true);
+}
