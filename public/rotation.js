@@ -1,7 +1,10 @@
-var reference = new Firebase('https://airdino.firebaseio.com/');
+var socket = io('http://localhost');
 var beta = 0;
 var gamma = 0;
 var alpha = 0;
+socket.on('connect', function(){
+  socket.emit("gyro", {'beta': beta, 'gamma': gamma, 'alpha': alpha});
+});
 
 var onComplete = function(error) {
   if (error) {
@@ -10,7 +13,6 @@ var onComplete = function(error) {
     console.log('Synchronization succeeded');
   }
 };
-reference.child('player1').push({'beta': beta, 'gamma': gamma, 'alpha': alpha});
 
 
 function tilt(string,x,y,z){
@@ -26,7 +28,7 @@ function tilt(string,x,y,z){
   if (window.DeviceOrientationEvent) {
       window.addEventListener("deviceorientation", function () {
         tilt("rotation",event.beta, event.gamma, event.alpha);
-        reference.child('player1').set({'beta': beta, 'gamma': gamma, 'alpha': alpha});
+        socket.emit("gyro", {'beta': beta, 'gamma': gamma, 'alpha': alpha});
       }, true);
   }
 
@@ -35,9 +37,3 @@ function tilt(string,x,y,z){
 //     document.getElementById('debug').innerHTML = beta + ' ' + gamma + ' ' + alpha;
 //   }
 //   ,0);
-
-reference.on('child_changed', function(snapshot) {
-  var rotation = snapshot.val();
-  console.log(rotation.beta);
-  //displayChatMessage(rotation.beta, rotation.gamma, rotation.alpha);
-});
